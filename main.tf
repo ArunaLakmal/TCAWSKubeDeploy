@@ -44,3 +44,20 @@ resource "aws_default_route_table" "tc_private_rt" {
   }
 }
 
+#---- Subnets ----
+
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+resource "aws_subnet" "tc_public1_subnet" {
+  vpc_id = "${aws_vpc.tc_vpc.id}"
+  cidr_block = "${var.cidrs["public1"]}"
+  map_public_ip_on_launch = true
+  availability_zone = "${data.aws_availability_zones.available.names[0]}"
+
+  tags = {
+      Name = "tc_public_subnet1"
+  }
+}
+
+
