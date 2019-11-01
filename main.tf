@@ -93,6 +93,30 @@ resource "aws_subnet" "tc_private2_subnet" {
   }
 }
 
+resource "aws_route_table_association" "tc_public1_association" {
+  subnet_id = "${aws_subnet.tc_public1_subnet.id}"
+  route_table_id = "${aws_route_table.tc_public_rt.id}"
+}
+
+resource "aws_route_table_association" "tc_public2_association" {
+  subnet_id = "${aws_subnet.tc_public2_subnet.id}"
+  route_table_id = "${aws_route_table.tc_public_rt.id}"
+}
+
+resource "aws_route_table_association" "tc_private1_association" {
+  subnet_id = "${aws_subnet.tc_private1_subnet.id}"
+  route_table_id = "${aws_default_route_table.tc_private_rt.id}"
+}
+
+resource "aws_route_table_association" "tc_private2_association" {
+  subnet_id = "${aws_subnet.tc_private2_subnet.id}"
+  route_table_id = "${aws_default_route_table.tc_private_rt.id}"
+}
+
+
+
+
+
 
 
 
