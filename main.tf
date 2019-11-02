@@ -113,11 +113,34 @@ resource "aws_route_table_association" "tc_private2_association" {
   route_table_id = "${aws_default_route_table.tc_private_rt.id}"
 }
 
+#---- Security Group COnfiguration ----
 
+resource "aws_security_group" "tc_kubeadm_sg" {
+  name = "tc_kubeadm_sg"
+  description = "Security Group for the Kube Admin"
+  vpc_id = "${aws_vpc.tc_vpc.id}"
 
+#---- SSH ----
 
+  ingress {
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
+#---- HTTP Allow ----
+  ingress {
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-
-
-
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = -1
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
