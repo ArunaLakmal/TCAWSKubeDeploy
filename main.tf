@@ -230,11 +230,11 @@ resource "aws_instance" "tc_kube_worker" {
     command = <<EOD
     cat <<EOF > kube_hosts
 [kubemaster]
-${aws_instance.tc_kube_master.public_ip}
-[kubeworker]
-${aws_instance.tc_kube_worker[0].public_ip}
-${aws_instance.tc_kube_worker[1].public_ip}
-${aws_instance.tc_kube_worker[2].public_ip}
+master ansible_host=${aws_instance.tc_kube_master.public_ip} ansible_user=root
+[kubeworkers]
+worker1 ansible_host=/$${aws_instance.tc_kube_worker[0].public_ip} ansible_user=root
+worker2 ansible_host=/$${aws_instance.tc_kube_worker[1].public_ip} ansible_user=root
+worker3 ansible_host=/$${aws_instance.tc_kube_worker[2].public_ip} ansible_user=root
 EOF
 EOD
   }
