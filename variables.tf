@@ -8,3 +8,4 @@ variable "tc_key_name" {}
 variable "public_key_path" {}
 variable "tc_kube_instance" {}
 variable "tc_ami" {}
+variable "worker_nodes_count" {}

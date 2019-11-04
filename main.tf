@@ -214,12 +214,12 @@ resource "aws_instance" "tc_kube_master" {
 #---- Kube Workers ----
 
 resource "aws_instance" "tc_kube_worker" {
-  count         = 3
+  count         = "${var.worker_nodes_count}"
   instance_type = "${var.tc_kube_instance}"
   ami           = "${var.tc_ami}"
 
   tags = {
-    Name = "tc_kube_worker ${count.index}"
+    Name = "tc_kube_worker ${count.index + 1}"
   }
 
   key_name               = "${aws_key_pair.tc_key.id}"
@@ -239,4 +239,3 @@ EOF
 EOD
   }
 }
-
