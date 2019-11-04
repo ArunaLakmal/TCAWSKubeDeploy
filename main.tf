@@ -232,9 +232,9 @@ resource "aws_instance" "tc_kube_worker" {
 [kubemaster]
 ${aws_instance.tc_kube_master.public_ip}
 [kubeworker]
-${aws_instance.tc_kube_worker[0]}
-${aws_instance.tc_kube_worker[1]}
-${aws_instance.tc_kube_worker[2]}
+${aws_instance.tc_kube_worker[0].public_ip}
+${aws_instance.tc_kube_worker[1].public_ip}
+${aws_instance.tc_kube_worker[2].public_ip}
 EOF
 EOD
   }
