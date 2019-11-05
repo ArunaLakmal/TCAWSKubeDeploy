@@ -227,7 +227,7 @@ resource "aws_instance" "tc_kube_worker" {
   subnet_id              = "${aws_subnet.tc_private1_subnet.id}"
 
   provisioner "local-exec" {
-    command = <<-EOD
+    command = <<EOD
     cat <<EOF > kube_hosts
 [kubemaster]
 master ansible_host=${aws_instance.tc_kube_master.public_ip} ansible_user=root
@@ -237,7 +237,6 @@ worker2 ansible_host=${aws_instance.tc_kube_worker[1].public_ip} ansible_user=ro
 worker3 ansible_host=${aws_instance.tc_kube_worker[2].public_ip} ansible_user=root
 EOF
 EOD
-
 interpreter = ["/bin/bash" , "-c"]
   }
 }
