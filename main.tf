@@ -233,7 +233,7 @@ resource "aws_instance" "tc_kube_worker" {
 master ansible_host=${aws_instance.tc_kube_master.public_ip} ansible_user=root
 [kubeworkers]
 %{for pub_ip in aws_instance.tc_kube_worker["S{count.index}"]}
-worker1 ansible_host=${pub_ip} ansible_user=root
+worker1 ansible_host=$${pub_ip} ansible_user=root
 %{endfor}
 EOF
 EOD
