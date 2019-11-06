@@ -232,9 +232,9 @@ resource "aws_instance" "tc_kube_worker" {
 [kubemaster]
 master ansible_host=${aws_instance.tc_kube_master.public_ip} ansible_user=root
 [kubeworkers]
-worker1 ansible_host=${aws_instance.tc_kube_worker[0].public_ip} ansible_user=root
-worker2 ansible_host=${aws_instance.tc_kube_worker[1].public_ip} ansible_user=root
-worker3 ansible_host=${aws_instance.tc_kube_worker[2].public_ip} ansible_user=root
+%{for pub_ip in aws_instance.tc_kube_worker["S{count.index}"]}
+worker1 ansible_host=${pub_ip} ansible_user=root
+%{endfor}
 EOF
 EOD
 interpreter = ["/bin/bash" , "-c"]
