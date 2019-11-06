@@ -10,5 +10,5 @@ cidrs = {
 tc_key_name      = "ironman"
 public_key_path  = "/root/.ssh/ironman.pub"
 tc_kube_instance = "t2.medium"
-tc_ami           = "ami-00eb20669e0990cb4"
+tc_ami           = "ami-00dc79254d0461090"
 worker_nodes_count ="3"
