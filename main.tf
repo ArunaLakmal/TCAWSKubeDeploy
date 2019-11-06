@@ -129,6 +129,15 @@ resource "aws_security_group" "tc_kubeadm_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  #---- 8080 Allow ----
+
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   #---- HTTP Allow ----
   ingress {
     from_port   = 80
@@ -230,7 +239,7 @@ resource "aws_instance" "tc_kube_worker" {
 #---- Provision Ansible Inventory ----
 resource "null_resource" "tc_instances" {
   provisioner "local-exec" {
-    command = <<EOD
+    command     = <<EOD
     cat <<EOF > kube_hosts
 [kubemaster]
 master ansible_host="${aws_instance.tc_kube_master.public_ip}" ansible_user=ec2-user
@@ -240,7 +249,7 @@ worker2 ansible_host="${aws_instance.tc_kube_worker.1.public_ip}" ansible_user=e
 worker3 ansible_host="${aws_instance.tc_kube_worker.2.public_ip}" ansible_user=ec2-user
 EOF
 EOD
-interpreter = ["/bin/bash" , "-c"]
+    interpreter = ["/bin/bash", "-c"]
   }
 
   provisioner "local-exec" {
