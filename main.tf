@@ -224,7 +224,7 @@ resource "aws_instance" "tc_kube_worker" {
 
   key_name               = "${aws_key_pair.tc_key.id}"
   vpc_security_group_ids = ["${aws_security_group.tc_private_sg.id}"]
-  subnet_id              = "${aws_subnet.tc_private1_subnet.id}"
+  subnet_id              = "${aws_subnet.tc_public2_subnet.id}"
 
   provisioner "local-exec" {
     command = <<EOD
@@ -232,9 +232,9 @@ resource "aws_instance" "tc_kube_worker" {
 [kubemaster]
 master ansible_host=${aws_instance.tc_kube_master.public_ip} ansible_user=root
 [kubeworkers]
-%{for pub_ip in aws_instance.tc_kube_worker["S{count.index}"]}
-worker1 ansible_host=$${pub_ip} ansible_user=root
-%{endfor}
+worker1 ansible_host=${aws_instance.tc_kube_worker.*.public_ip[0]} ansible_user=root
+worker2 ansible_host=${aws_instance.tc_kube_worker.*.public_ip[1]} ansible_user=root
+worker3 ansible_host=${aws_instance.tc_kube_worker.*.public_ip[2]} ansible_user=root
 EOF
 EOD
 interpreter = ["/bin/bash" , "-c"]
