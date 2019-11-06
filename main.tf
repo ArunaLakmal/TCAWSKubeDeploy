@@ -242,4 +242,8 @@ EOF
 EOD
 interpreter = ["/bin/bash" , "-c"]
   }
+
+  provisioner "local-exec" {
+    command = "ansible-playbook -i kube_hosts ./kube_playbooks/kube_dependencies.yml"
+  }
 }
