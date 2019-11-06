@@ -223,7 +223,7 @@ resource "aws_instance" "tc_kube_worker" {
   }
 
   key_name               = "${aws_key_pair.tc_key.id}"
-  vpc_security_group_ids = ["${aws_security_group.tc_private_sg.id}"]
+  vpc_security_group_ids = ["${aws_security_group.tc_kubeadm_sg.id}"]
   subnet_id              = "${aws_subnet.tc_public2_subnet.id}"
 }
 
