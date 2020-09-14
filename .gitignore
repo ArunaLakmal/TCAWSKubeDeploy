@@ -1,0 +1,3 @@
+#ignore terraform state
+terraform.tfstate*
+.terraform
