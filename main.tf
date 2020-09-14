@@ -227,6 +227,54 @@ resource "aws_instance" "tc_kube_worker" {
   subnet_id              = "${aws_subnet.tc_public2_subnet.id}"
 }
 
+#---- Application load balancer for the frontend ----
+
+resource "aws_lb" "ingress_lb" {
+  name               = "front-end-ing-alb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.tc_public_sg.id]
+  subnets = [aws_subnet.tc_public1_subnet.id,
+  aws_subnet.tc_public2_subnet.id]
+
+  enable_deletion_protection = true
+
+  tags = {
+    Environment = "k8s"
+  }
+}
+
+#---- LALB istener -----
+
+resource "aws_lb_listener" "ingress_listener" {
+  load_balancer_arn = "${aws_lb.ingress_lb.arn}"
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = "${aws_lb_target_group.k8s_ing_tg.arn}"
+  }
+}
+
+#---- frontend target group ----
+
+resource "aws_lb_target_group" "k8s_ing_tg" {
+  name     = "ingress-target-group"
+  port     = 30001
+  protocol = "HTTP"
+  vpc_id   = "${aws_vpc.tc_vpc.id}"
+}
+
+#----  register instances ----
+
+resource "aws_lb_target_group_attachment" "kube_workers" {
+  count            = "${length(aws_instance.tc_kube_worker)}"
+  target_group_arn = "${aws_lb_target_group.k8s_ing_tg.arn}"
+  target_id        = "${aws_instance.tc_kube_worker[count.index].id}"
+  port             = 30001
+}
+
 #---- Provision Ansible Inventory ----
 resource "null_resource" "tc_instances" {
   provisioner "local-exec" {
